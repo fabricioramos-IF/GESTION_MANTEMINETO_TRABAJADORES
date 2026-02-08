@@ -97,7 +97,7 @@ namespace Trabajadores.Web.Services
             try
             {
                 var idParam = new SqlParameter("@IdTrabajador", id);
-                
+
                 await _context.Database.ExecuteSqlRawAsync(
                     "EXEC sp_eliminar_trabajador @IdTrabajador",
                     idParam);

@@ -1,14 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Trabajadores.Web.Data;
+using Trabajadores.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configurarion Entity Framework Core -- SQL Server
+// Configuracion Entity Framework Core -- SQL Server
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Registrar servicios
+builder.Services.AddScoped<ITrabajadorService, TrabajadorService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 var app = builder.Build();
 
