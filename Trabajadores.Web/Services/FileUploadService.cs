@@ -3,7 +3,7 @@ namespace Trabajadores.Web.Services
     public class FileUploadService : IFileUploadService
     {
         private readonly IWebHostEnvironment _environment;
-        private readonly long _maxFileSize = 2 * 1024 * 1024; // 2MB
+        private readonly long _maxFileSize = 2 * 1024 * 1024;
         private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
 
         public FileUploadService(IWebHostEnvironment environment)
@@ -17,13 +17,13 @@ namespace Trabajadores.Web.Services
 
             if (file == null || file.Length == 0)
             {
-                errorMessage = "No se ha seleccionado ningún archivo";
+                errorMessage = "No se ha seleccionado ningun archivo";
                 return false;
             }
 
             if (file.Length > _maxFileSize)
             {
-                errorMessage = $"El archivo excede el tamaño máximo permitido de {_maxFileSize / 1024 / 1024}MB";
+                errorMessage = $"El archivo excede el tamano maximo permitido de {_maxFileSize / 1024 / 1024}MB";
                 return false;
             }
 
@@ -41,17 +41,13 @@ namespace Trabajadores.Web.Services
         {
             try
             {
-                if (!ValidateImage(file, out string errorMessage))
-                {
+                if (!ValidateImage(file, out _))
                     return null;
-                }
 
                 var uploadsFolder = Path.Combine(_environment.WebRootPath, "images", folder);
                 
                 if (!Directory.Exists(uploadsFolder))
-                {
                     Directory.CreateDirectory(uploadsFolder);
-                }
 
                 var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -79,9 +75,7 @@ namespace Trabajadores.Web.Services
                 var fullPath = Path.Combine(_environment.WebRootPath, filePath.TrimStart('/'));
                 
                 if (File.Exists(fullPath))
-                {
                     await Task.Run(() => File.Delete(fullPath));
-                }
 
                 return true;
             }

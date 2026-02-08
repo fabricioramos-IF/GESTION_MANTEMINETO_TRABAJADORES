@@ -9,16 +9,11 @@ namespace Trabajadores.Web.Controllers
     {
         private readonly ITrabajadorService _trabajadorService;
         private readonly IFileUploadService _fileUploadService;
-        private readonly ILogger<TrabajadorController> _logger;
 
-        public TrabajadorController(
-            ITrabajadorService trabajadorService,
-            IFileUploadService fileUploadService,
-            ILogger<TrabajadorController> logger)
+        public TrabajadorController(ITrabajadorService trabajadorService, IFileUploadService fileUploadService)
         {
             _trabajadorService = trabajadorService;
             _fileUploadService = fileUploadService;
-            _logger = logger;
         }
 
         public async Task<IActionResult> Index(string? sexo = null)
@@ -58,14 +53,15 @@ namespace Trabajadores.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(TrabajadorViewModel model)
         {
+            ModelState.Remove("FotoArchivo");
+            
             if (!ModelState.IsValid)
             {
-                var errores = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
+                var errores = ModelState
+                    .Where(x => x.Value?.Errors.Count > 0)
+                    .Select(x => $"{x.Key}: {string.Join(", ", x.Value!.Errors.Select(e => e.ErrorMessage))}")
                     .ToList();
-                
-                return Json(new { exito = false, mensaje = string.Join(", ", errores) });
+                return Json(new { exito = false, mensaje = string.Join(". ", errores) });
             }
 
             string? fotoUrl = null;
@@ -87,11 +83,11 @@ namespace Trabajadores.Web.Controllers
 
             var trabajador = new Trabajador
             {
-                Nombres = model.Nombres.Trim(),
-                Apellidos = model.Apellidos.Trim(),
-                TipoDocumento = model.TipoDocumento,
-                NumeroDocumento = model.NumeroDocumento.Trim(),
-                Sexo = model.Sexo,
+                Nombres = model.Nombres?.Trim() ?? "",
+                Apellidos = model.Apellidos?.Trim() ?? "",
+                TipoDocumento = model.TipoDocumento ?? "",
+                NumeroDocumento = model.NumeroDocumento?.Trim() ?? "",
+                Sexo = model.Sexo ?? "",
                 FechaNacimiento = model.FechaNacimiento,
                 Foto = fotoUrl,
                 Direccion = model.Direccion?.Trim()
@@ -101,16 +97,10 @@ namespace Trabajadores.Web.Controllers
 
             if (resultado)
             {
-                _logger.LogInformation("Trabajador creado: {Nombres} {Apellidos}", trabajador.Nombres, trabajador.Apellidos);
-                return Json(new { exito = true, mensaje = "Trabajador registrado" });
+                return Json(new { exito = true, mensaje = "Trabajador registrado exitosamente" });
             }
 
-            if (!string.IsNullOrEmpty(fotoUrl))
-            {
-                await _fileUploadService.DeleteImageAsync(fotoUrl);
-            }
-
-            return Json(new { exito = false, mensaje = "Error al registrar el trabajador" });
+            return Json(new { exito = false, mensaje = "Error al registrar. Verifique que el documento no esté duplicado." });
         }
 
         [HttpPost]
@@ -169,7 +159,6 @@ namespace Trabajadores.Web.Controllers
 
             if (resultado)
             {
-                _logger.LogInformation("Trabajador actualizado: ID {Id}", trabajador.IdTrabajador);
                 return Json(new { exito = true, mensaje = "Trabajador actualizado" });
             }
 
@@ -195,8 +184,6 @@ namespace Trabajadores.Web.Controllers
                 {
                     await _fileUploadService.DeleteImageAsync(trabajador.Foto);
                 }
-
-                _logger.LogInformation("Trabajador eliminado: ID {Id}", id);
                 return Json(new { exito = true, mensaje = "Trabajador eliminado" });
             }
 

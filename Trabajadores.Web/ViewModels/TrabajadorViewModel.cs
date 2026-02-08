@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Trabajadores.Web.Validators;
 
 namespace Trabajadores.Web.ViewModels
 {
@@ -19,27 +20,29 @@ namespace Trabajadores.Web.ViewModels
         [Display(Name = "Tipo de Documento")]
         public string TipoDocumento { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "El número de documento es obligatorio")]
-        [StringLength(20, ErrorMessage = "El número de documento no puede exceder 20 caracteres")]
-        [Display(Name = "Número de Documento")]
+        [Required(ErrorMessage = "El numero de documento es obligatorio")]
+        [StringLength(20, ErrorMessage = "El numero de documento no puede exceder 20 caracteres")]
+        [RegularExpression(@"^\d+$", ErrorMessage = "El numero de documento solo debe contener numeros")]
+        [Display(Name = "Numero de Documento")]
         public string NumeroDocumento { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El sexo es obligatorio")]
-        [RegularExpression("^[MF]$", ErrorMessage = "El sexo debe ser M (Masculino) o F (Femenino)")]
+        [RegularExpression("^[MF]$", ErrorMessage = "El sexo debe ser M o F")]
         public string Sexo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La fecha de nacimiento es obligatoria")]
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Nacimiento")]
+        [EdadMinima(18, ErrorMessage = "El trabajador debe tener 18 anios o mas")]
         public DateTime FechaNacimiento { get; set; }
 
-        [Display(Name = "Fotografía")]
+        [Display(Name = "Fotografia")]
         public IFormFile? FotoArchivo { get; set; }
 
         public string? FotoUrl { get; set; }
 
         [StringLength(200)]
-        [Display(Name = "Dirección")]
+        [Display(Name = "Direccion")]
         public string? Direccion { get; set; }
     }
 }

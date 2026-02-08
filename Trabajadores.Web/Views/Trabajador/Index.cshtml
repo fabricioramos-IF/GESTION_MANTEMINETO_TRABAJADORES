@@ -4,182 +4,604 @@
     var filtroActual = ViewBag.FiltroSexo as string;
 }
 
+<style>
+.trabajador-wrapper {
+    background-color: #ffffff;
+    min-height: 100%;
+    flex: 1;
+}
+    @@media (max-width: 576px) {
+        .modal-dialog {
+            margin: 0.5rem;
+        }
+        .modal-footer .btn {
+            width: 100% !important;
+            margin-bottom: 0.5rem;
+        }
+        .modal-footer .btn:last-child {
+            margin-bottom: 0;
+        }
+        .header-actions {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start !important;
+        }
+        .page-title {
+            font-size: 1.5rem;
+        }
+    }
+    #avatarContainer:hover {
+        border-color: #0d6efd !important;
+        transition: border-color 0.3s ease;
+    }
+    #avatarContainer:hover + label,
+    label[for="foto"]:hover {
+        background-color: #0b5ed7 !important;
+        transform: scale(1.1);
+        transition: all 0.2s ease;
+    }
+    .table-clean {
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .table-clean thead th {
+        background-color: #f8f9fa;
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #e9ecef;
+        padding: 1rem 0.75rem;
+    }
+    .table-clean tbody tr {
+        border-bottom: 1px solid #f1f1f1;
+        transition: background-color 0.15s ease;
+    }
+    .table-clean tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    .table-clean tbody td {
+        padding: 1rem 0.75rem;
+        vertical-align: middle;
+        border: none;
+    }
+    .badge-tipo-doc {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        font-weight: 500;
+        padding: 0.35rem 0.65rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+    }
+    .badge-sexo-m {
+        background-color: #e3f2fd;
+        color: #0d6efd;
+        font-weight: 500;
+        padding: 0.35rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+    .badge-sexo-f {
+        background-color: #fff3e0;
+        color: #f57c00;
+        font-weight: 500;
+        padding: 0.35rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+    .btn-editar {
+        background-color: #fff;
+        border: 1px solid #0d6efd;
+        color: #0d6efd;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+    }
+    .btn-editar:hover {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+    .btn-eliminar {
+        background-color: #fff5f5;
+        border: 1px solid #dc3545;
+        color: #dc3545;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+    }
+    .btn-eliminar:hover {
+        background-color: #dc3545;
+        color: #fff;
+    }
+    .avatar-table {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e9ecef;
+    }
+    .avatar-placeholder {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.3rem;
+    }
+
+    .card-trabajador {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    .card-trabajador-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    .card-trabajador-avatar {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .card-trabajador-avatar-placeholder {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+    .card-trabajador-info {
+        flex: 1;
+    }
+    .card-trabajador-nombre {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+    .card-trabajador-body {
+        padding: 0 1rem 1rem;
+    }
+    .card-trabajador-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    .card-trabajador-item i {
+        width: 20px;
+        color: #6c757d;
+        margin-right: 0.5rem;
+    }
+    .card-trabajador-item-label {
+        color: #6c757d;
+        margin-right: 0.25rem;
+    }
+    .card-trabajador-actions {
+        display: flex;
+        border-top: 1px solid #f1f1f1;
+    }
+    .card-trabajador-actions .btn {
+        flex: 1;
+        border-radius: 0;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    .card-trabajador-actions .btn:first-child {
+        border-right: 1px solid #f1f1f1;
+    }
+    .card-btn-editar {
+        background-color: #fff;
+        color: #0d6efd;
+        border: none;
+    }
+    .card-btn-editar:hover {
+        background-color: #e7f1ff;
+        color: #0d6efd;
+    }
+    .card-btn-eliminar {
+        background-color: #fff5f5;
+        color: #dc3545;
+        border: none;
+    }
+    .card-btn-eliminar:hover {
+        background-color: #ffe5e5;
+        color: #dc3545;
+    }
+
+    .vista-desktop { display: block; }
+    .vista-mobile { display: none; }
+    
+    @@media (max-width: 991px) {
+        .vista-desktop { display: none; }
+        .vista-mobile { display: block; }
+    }
+    .filtro-container {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .filtro-chips {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    .filtro-chip {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        text-decoration: none;
+    }
+    .filtro-chip-todos {
+        background-color: #e9ecef;
+        color: #495057;
+    }
+    .filtro-chip-todos:hover, .filtro-chip-todos.active {
+        background-color: #6c757d;
+        color: white;
+    }
+    .filtro-chip-m {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+    .filtro-chip-m:hover, .filtro-chip-m.active {
+        background-color: #1976d2;
+        color: white;
+        box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+    }
+    .filtro-chip-f {
+        background-color: #fff3e0;
+        color: #f57c00;
+    }
+    .filtro-chip-f:hover, .filtro-chip-f.active {
+        background-color: #f57c00;
+        color: white;
+        box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+    }
+    .filtro-stats {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .stat-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+    .stat-label {
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+    }
+    .stat-icon-total { background: #e9ecef; color: #495057; }
+    .stat-icon-m { background: #e3f2fd; color: #1976d2; }
+    .stat-icon-f { background: #fff3e0; color: #f57c00; }
+    
+    @@media (max-width: 768px) {
+        .filtro-container {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .filtro-stats {
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    }
+</style>
+
+@{
+    var totalMasculino = Model.Count(t => t.Sexo == "M");
+    var totalFemenino = Model.Count(t => t.Sexo == "F");
+}
+
+<div class="trabajador-wrapper">
 <div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">
-            <i class="bi bi-people-fill me-2"></i>Listado de Trabajadores
-        </h2>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTrabajador" onclick="abrirModalCrear()">
-            <i class="bi bi-plus-circle me-1"></i> Nuevo Trabajador
-        </button>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 header-actions">
+        <div>
+            <h2 class="page-title fw-bold mb-1">Gestión de Trabajadores</h2>
+            <p class="text-muted mb-0"><i class="bi bi-person me-1"></i>Bienvenido</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTrabajador" onclick="abrirModalCrear()">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo Trabajador
+            </button>
+        </div>
     </div>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-header bg-light">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <span class="fw-bold">Total de registros: @Model.Count</span>
-                </div>
-                <div class="col-md-6">
-                    <div class="d-flex justify-content-end align-items-center gap-2">
-                        <label class="mb-0">Filtrar por sexo:</label>
-                        <select id="filtroSexo" class="form-select form-select-sm" style="width: auto;" onchange="filtrarPorSexo()">
-                            <option value="">Todos</option>
-                            <option value="M" @(filtroActual == "M" ? "selected" : "")>Masculino</option>
-                            <option value="F" @(filtroActual == "F" ? "selected" : "")>Femenino</option>
-                        </select>
-                    </div>
-                </div>
+    <!-- Filtros Modernos -->
+    <div class="filtro-container d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <div class="text-muted small mb-2"><i class="bi bi-funnel me-1"></i>Filtrar por sexo:</div>
+            <div class="filtro-chips">
+                <a href="@Url.Action("Index", "Trabajador")" 
+                   class="filtro-chip filtro-chip-todos @(string.IsNullOrEmpty(filtroActual) ? "active" : "")">
+                    <i class="bi bi-people me-1"></i>Todos
+                </a>
+                <a href="@Url.Action("Index", "Trabajador", new { sexo = "M" })" 
+                   class="filtro-chip filtro-chip-m @(filtroActual == "M" ? "active" : "")">
+                    <i class="bi bi-gender-male me-1"></i>Masculino
+                </a>
+                <a href="@Url.Action("Index", "Trabajador", new { sexo = "F" })" 
+                   class="filtro-chip filtro-chip-f @(filtroActual == "F" ? "active" : "")">
+                    <i class="bi bi-gender-female me-1"></i>Femenino
+                </a>
             </div>
         </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th style="width: 60px;">Foto</th>
-                            <th>Nombres</th>
-                            <th>Apellidos</th>
-                            <th>Tipo Doc.</th>
-                            <th>Nro. Documento</th>
-                            <th>Sexo</th>
-                            <th>Fecha Nacimiento</th>
-                            <th>Dirección</th>
-                            <th style="width: 120px;" class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Any())
-                        {
-                            @foreach (var trabajador in Model)
+      
+    </div>
+
+    <!-- Vista Desktop: Tabla -->
+    <div class="vista-desktop">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-clean mb-0">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Tipo Doc.</th>
+                                <th>Nro. Documento</th>
+                                <th>Sexo</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Dirección</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Any())
                             {
-                                var rowClass = trabajador.Sexo == "M" ? "table-primary" : "table-warning";
-                                <tr class="@rowClass">
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(trabajador.Foto))
-                                        {
-                                            <img src="@trabajador.Foto" alt="Foto" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
-                                        }
-                                        else
-                                        {
-                                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                <i class="bi bi-person-fill text-white"></i>
-                                            </div>
-                                        }
-                                    </td>
-                                    <td>@trabajador.Nombres</td>
-                                    <td>@trabajador.Apellidos</td>
-                                    <td>@trabajador.TipoDocumento</td>
-                                    <td>@trabajador.NumeroDocumento</td>
-                                    <td>
-                                        <span class="badge @(trabajador.Sexo == "M" ? "bg-primary" : "bg-warning text-dark")">
-                                            @(trabajador.Sexo == "M" ? "Masculino" : "Femenino")
-                                        </span>
-                                    </td>
-                                    <td>@trabajador.FechaNacimiento.ToString("dd/MM/yyyy")</td>
-                                    <td>@(trabajador.Direccion ?? "-")</td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-sm btn-outline-primary me-1" 
-                                                onclick="abrirModalEditar(@trabajador.IdTrabajador)" title="Editar">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                onclick="confirmarEliminar(@trabajador.IdTrabajador, '@trabajador.Nombres @trabajador.Apellidos')" title="Eliminar">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                                @foreach (var trabajador in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(trabajador.Foto))
+                                            {
+                                                <img src="@trabajador.Foto" alt="Foto" class="avatar-table" />
+                                            }
+                                            else
+                                            {
+                                                <div class="avatar-placeholder">
+                                                    <i class="bi bi-person-fill"></i>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="fw-medium">@trabajador.Nombres</td>
+                                        <td>@trabajador.Apellidos</td>
+                                        <td>
+                                            <span class="badge-tipo-doc">@trabajador.TipoDocumento</span>
+                                        </td>
+                                        <td class="fw-medium">@trabajador.NumeroDocumento</td>
+                                        <td>
+                                            <span class="@(trabajador.Sexo == "M" ? "badge-sexo-m" : "badge-sexo-f")">
+                                                @(trabajador.Sexo == "M" ? "Masculino" : "Femenino")
+                                            </span>
+                                        </td>
+                                        <td>@trabajador.FechaNacimiento.ToString("d/M/yyyy")</td>
+                                        <td>@(trabajador.Direccion ?? "-")</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-editar me-1" 
+                                                    onclick="abrirModalEditar(@trabajador.IdTrabajador)">
+                                                <i class="bi bi-pencil me-1"></i>Editar
+                                            </button>
+                                            <button type="button" class="btn btn-eliminar" 
+                                                    onclick="confirmarEliminar(@trabajador.IdTrabajador, '@trabajador.Nombres @trabajador.Apellidos')">
+                                                <i class="bi bi-trash me-1"></i>Eliminar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="9" class="text-center py-5 text-muted">
+                                        <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                        No hay trabajadores registrados
                                     </td>
                                 </tr>
                             }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vista Mobile: Cards -->
+    <div class="vista-mobile">
+        @if (Model.Any())
+        {
+            @foreach (var trabajador in Model)
+            {
+                <div class="card card-trabajador">
+                    <div class="card-trabajador-header">
+                        @if (!string.IsNullOrEmpty(trabajador.Foto))
+                        {
+                            <img src="@trabajador.Foto" alt="Foto" class="card-trabajador-avatar" />
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="9" class="text-center py-4 text-muted">
-                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-                                    No hay trabajadores registrados
-                                </td>
-                            </tr>
+                            <div class="card-trabajador-avatar-placeholder">
+                                <i class="bi bi-person-fill"></i>
+                            </div>
                         }
-                    </tbody>
-                </table>
+                        <div class="card-trabajador-info">
+                            <div class="card-trabajador-nombre">@trabajador.Nombres @trabajador.Apellidos</div>
+                            <div>
+                                <span class="badge-tipo-doc">@trabajador.TipoDocumento</span>
+                                <span class="ms-2 text-muted">@trabajador.NumeroDocumento</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-trabajador-body">
+                        <div class="card-trabajador-item">
+                            <i class="bi bi-person"></i>
+                            <span class="card-trabajador-item-label">Sexo:</span>
+                            <span class="@(trabajador.Sexo == "M" ? "badge-sexo-m" : "badge-sexo-f")">
+                                @(trabajador.Sexo == "M" ? "Masculino" : "Femenino")
+                            </span>
+                        </div>
+                        <div class="card-trabajador-item">
+                            <i class="bi bi-calendar"></i>
+                            <span class="card-trabajador-item-label">Nacimiento:</span>
+                            <strong>@trabajador.FechaNacimiento.ToString("d/M/yyyy")</strong>
+                        </div>
+                        <div class="card-trabajador-item">
+                            <i class="bi bi-geo-alt"></i>
+                            <span class="card-trabajador-item-label">Dirección:</span>
+                            <span>@(trabajador.Direccion ?? "-")</span>
+                        </div>
+                    </div>
+                    <div class="card-trabajador-actions">
+                        <button type="button" class="btn card-btn-editar" onclick="abrirModalEditar(@trabajador.IdTrabajador)">
+                            <i class="bi bi-pencil me-1"></i>Editar
+                        </button>
+                        <button type="button" class="btn card-btn-eliminar" onclick="confirmarEliminar(@trabajador.IdTrabajador, '@trabajador.Nombres @trabajador.Apellidos')">
+                            <i class="bi bi-trash me-1"></i>Eliminar
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                No hay trabajadores registrados
             </div>
-        </div>
+        }
     </div>
 </div>
 
 <!-- Modal Crear/Editar Trabajador -->
 <div class="modal fade" id="modalTrabajador" tabindex="-1" aria-labelledby="modalTrabajadorLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalTrabajadorLabel">
-                    <i class="bi bi-person-plus-fill me-2"></i><span id="tituloModal">Nuevo Trabajador</span>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-semibold" id="modalTrabajadorLabel">
+                    <span id="tituloModal">Nuevo Trabajador</span>
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <form id="formTrabajador" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="idTrabajador" name="IdTrabajador" value="0" />
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
+                <div class="modal-body pt-3">
+                    <!-- Avatar/Foto Preview con botón de subir -->
+                    <div class="text-center mb-4">
+                        <div class="position-relative d-inline-block">
+                            <div id="avatarContainer" class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto" 
+                                 style="width: 90px; height: 90px; border: 2px solid #e0e0e0; cursor: pointer;"
+                                 onclick="document.getElementById('foto').click()">
+                                <img id="previewImagen" src="" alt="Foto" class="rounded-circle d-none" style="width: 86px; height: 86px; object-fit: cover;" />
+                                <i id="iconoAvatar" class="bi bi-person-fill text-secondary" style="font-size: 2.8rem;"></i>
+                            </div>
+                            <label for="foto" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                                   style="width: 28px; height: 28px; cursor: pointer; border: 2px solid white;">
+                                <i class="bi bi-camera-fill" style="font-size: 0.75rem;"></i>
+                            </label>
+                            <input type="file" class="d-none" id="foto" name="FotoArchivo" accept=".jpg,.jpeg,.png" />
+                        </div>
+                        <small class="text-muted d-block mt-2">Clic para subir foto</small>
+                    </div>
+
+                    <!-- Nombres y Apellidos -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-6 mb-3 mb-sm-0">
+                            <label for="nombres" class="form-label text-muted small mb-1">Nombres <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nombres" name="Nombres" required maxlength="100" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                        <div class="col-12 col-sm-6">
+                            <label for="apellidos" class="form-label text-muted small mb-1">Apellidos <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="apellidos" name="Apellidos" required maxlength="100" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="tipoDocumento" class="form-label">Tipo de Documento <span class="text-danger">*</span></label>
+                    </div>
+
+                    <!-- Tipo y Número de Documento -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-6 mb-3 mb-sm-0">
+                            <label for="tipoDocumento" class="form-label text-muted small mb-1">Tipo de Documento <span class="text-danger">*</span></label>
                             <select class="form-select" id="tipoDocumento" name="TipoDocumento" required>
-                                <option value="">Seleccione...</option>
+                                <option value="">Seleccione tipo</option>
                                 <option value="DNI">DNI</option>
                                 <option value="RUC">RUC</option>
                                 <option value="Pasaporte">Pasaporte</option>
                                 <option value="Carnet Ext.">Carnet de Extranjería</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label for="numeroDocumento" class="form-label">Número de Documento <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="numeroDocumento" name="NumeroDocumento" required maxlength="20" />
+                        <div class="col-12 col-sm-6">
+                            <label for="numeroDocumento" class="form-label text-muted small mb-1">Nro. de Documento <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="numeroDocumento" name="NumeroDocumento" 
+                                   required maxlength="20" pattern="^\d+$" 
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                   title="Solo se permiten números" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="sexo" class="form-label">Sexo <span class="text-danger">*</span></label>
+                    </div>
+
+                    <!-- Sexo y Fecha de Nacimiento -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-6 mb-3 mb-sm-0">
+                            <label for="sexo" class="form-label text-muted small mb-1">Sexo <span class="text-danger">*</span></label>
                             <select class="form-select" id="sexo" name="Sexo" required>
-                                <option value="">Seleccione...</option>
+                                <option value="">Seleccione sexo</option>
                                 <option value="M">Masculino</option>
                                 <option value="F">Femenino</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento <span class="text-danger">*</span></label>
+                        <div class="col-12 col-sm-6">
+                            <label for="fechaNacimiento" class="form-label text-muted small mb-1">Fecha de Nacimiento <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="fechaNacimiento" name="FechaNacimiento" required />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="foto" class="form-label">Fotografía</label>
-                            <input type="file" class="form-control" id="foto" name="FotoArchivo" accept=".jpg,.jpeg,.png" />
-                            <small class="text-muted">Formatos: JPG, PNG. Máximo: 2MB</small>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Vista previa</label>
-                            <div id="previewContainer" class="border rounded p-2 text-center" style="min-height: 100px;">
-                                <img id="previewImagen" src="" alt="Vista previa" class="img-thumbnail d-none" style="max-height: 80px;" />
-                                <span id="sinImagen" class="text-muted"><i class="bi bi-image fs-2"></i><br/>Sin imagen</span>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <textarea class="form-control" id="direccion" name="Direccion" rows="2" maxlength="200"></textarea>
+                            <div class="invalid-feedback" id="errorEdad">Debe tener al menos 18 años</div>
                         </div>
                     </div>
+
+                    <!-- Dirección -->
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label text-muted small mb-1">Dirección</label>
+                        <textarea class="form-control" id="direccion" name="Direccion" rows="2" maxlength="200" placeholder="Ingrese la dirección (opcional)"></textarea>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-1"></i>Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="btnGuardar">
-                        <i class="bi bi-check-circle me-1"></i>Guardar
+                <div class="modal-footer border-0 pt-0 flex-column flex-sm-row">
+                    <button type="button" class="btn btn-light w-100 w-sm-auto mb-2 mb-sm-0 order-2 order-sm-1" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary w-100 w-sm-auto order-1 order-sm-2" id="btnGuardar">
+                        <span id="textoBotonGuardar">Crear Trabajador</span>
                     </button>
                 </div>
             </form>
@@ -189,25 +611,21 @@
 
 <!-- Modal Confirmar Eliminación -->
 <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="modalEliminarLabel">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Confirmar Eliminación
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-semibold" id="modalEliminarLabel">
+                    <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Confirmar Eliminación
                 </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-0">¿Está seguro de eliminar el registro?</p>
-                <p class="fw-bold text-danger" id="nombreEliminar"></p>
+                <p class="mb-2">¿Está seguro de eliminar el registro?</p>
+                <p class="fw-bold text-danger mb-0" id="nombreEliminar"></p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i>Cancelar
-                </button>
-                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-                    <i class="bi bi-trash me-1"></i>Eliminar
-                </button>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger px-4" id="btnConfirmarEliminar">Eliminar</button>
             </div>
         </div>
     </div>
@@ -223,19 +641,63 @@
         <div class="toast-body" id="toastMensaje"></div>
     </div>
 </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
         let idEliminar = 0;
         let modoEdicion = false;
+        const EDAD_MINIMA = 18;
 
-        // Filtrar por sexo
-        function filtrarPorSexo() {
-            const sexo = document.getElementById('filtroSexo').value;
-            const url = sexo ? `@Url.Action("Index", "Trabajador")?sexo=${sexo}` : '@Url.Action("Index", "Trabajador")';
-            window.location.href = url;
+        // Calcular edad
+        function calcularEdad(fechaNacimiento) {
+            const hoy = new Date();
+            const nacimiento = new Date(fechaNacimiento);
+            let edad = hoy.getFullYear() - nacimiento.getFullYear();
+            const mes = hoy.getMonth() - nacimiento.getMonth();
+            if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+                edad--;
+            }
+            return edad;
         }
+
+        // Validar edad mínima
+        function validarEdad() {
+            const fechaInput = document.getElementById('fechaNacimiento');
+            const errorDiv = document.getElementById('errorEdad');
+            
+            if (fechaInput.value) {
+                const edad = calcularEdad(fechaInput.value);
+                if (edad < EDAD_MINIMA) {
+                    fechaInput.classList.add('is-invalid');
+                    errorDiv.textContent = `Debe tener al menos ${EDAD_MINIMA} años. Edad actual: ${edad} años`;
+                    return false;
+                } else if (edad > 120) {
+                    fechaInput.classList.add('is-invalid');
+                    errorDiv.textContent = 'La fecha de nacimiento no es válida';
+                    return false;
+                } else {
+                    fechaInput.classList.remove('is-invalid');
+                    fechaInput.classList.add('is-valid');
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        // Establecer fecha máxima (18 años atrás)
+        function establecerFechaMaxima() {
+            const hoy = new Date();
+            const fechaMaxima = new Date(hoy.getFullYear() - EDAD_MINIMA, hoy.getMonth(), hoy.getDate());
+            document.getElementById('fechaNacimiento').max = fechaMaxima.toISOString().split('T')[0];
+        }
+
+        // Inicializar validaciones
+        document.addEventListener('DOMContentLoaded', function() {
+            establecerFechaMaxima();
+            document.getElementById('fechaNacimiento').addEventListener('change', validarEdad);
+        });
 
         // Vista previa de imagen
         document.getElementById('foto').addEventListener('change', function(e) {
@@ -245,7 +707,7 @@
                 reader.onload = function(e) {
                     document.getElementById('previewImagen').src = e.target.result;
                     document.getElementById('previewImagen').classList.remove('d-none');
-                    document.getElementById('sinImagen').classList.add('d-none');
+                    document.getElementById('iconoAvatar').classList.add('d-none');
                 };
                 reader.readAsDataURL(file);
             }
@@ -255,16 +717,19 @@
         function abrirModalCrear() {
             modoEdicion = false;
             document.getElementById('tituloModal').textContent = 'Nuevo Trabajador';
+            document.getElementById('textoBotonGuardar').textContent = 'Crear Trabajador';
             document.getElementById('formTrabajador').reset();
             document.getElementById('idTrabajador').value = '0';
             document.getElementById('previewImagen').classList.add('d-none');
-            document.getElementById('sinImagen').classList.remove('d-none');
+            document.getElementById('iconoAvatar').classList.remove('d-none');
+            document.getElementById('fechaNacimiento').classList.remove('is-invalid', 'is-valid');
         }
 
         // Abrir modal para editar
         async function abrirModalEditar(id) {
             modoEdicion = true;
             document.getElementById('tituloModal').textContent = 'Editar Trabajador';
+            document.getElementById('textoBotonGuardar').textContent = 'Guardar Cambios';
             
             try {
                 const response = await fetch(`@Url.Action("Obtener", "Trabajador")/${id}`);
@@ -284,10 +749,10 @@
                 if (data.fotoUrl) {
                     document.getElementById('previewImagen').src = data.fotoUrl;
                     document.getElementById('previewImagen').classList.remove('d-none');
-                    document.getElementById('sinImagen').classList.add('d-none');
+                    document.getElementById('iconoAvatar').classList.add('d-none');
                 } else {
                     document.getElementById('previewImagen').classList.add('d-none');
-                    document.getElementById('sinImagen').classList.remove('d-none');
+                    document.getElementById('iconoAvatar').classList.remove('d-none');
                 }
                 
                 const modal = new bootstrap.Modal(document.getElementById('modalTrabajador'));
@@ -337,6 +802,49 @@
         // Enviar formulario
         document.getElementById('formTrabajador').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Validar campos requeridos
+            const nombres = document.getElementById('nombres').value.trim();
+            const apellidos = document.getElementById('apellidos').value.trim();
+            const tipoDoc = document.getElementById('tipoDocumento').value;
+            const numDoc = document.getElementById('numeroDocumento').value.trim();
+            const sexo = document.getElementById('sexo').value;
+            const fechaNac = document.getElementById('fechaNacimiento').value;
+
+            if (!nombres) {
+                mostrarNotificacion('Error', 'Los nombres son obligatorios', false);
+                return;
+            }
+            if (!apellidos) {
+                mostrarNotificacion('Error', 'Los apellidos son obligatorios', false);
+                return;
+            }
+            if (!tipoDoc) {
+                mostrarNotificacion('Error', 'Seleccione el tipo de documento', false);
+                return;
+            }
+            if (!numDoc) {
+                mostrarNotificacion('Error', 'El número de documento es obligatorio', false);
+                return;
+            }
+            if (!/^\d+$/.test(numDoc)) {
+                mostrarNotificacion('Error', 'El número de documento solo debe contener números', false);
+                return;
+            }
+            if (!sexo) {
+                mostrarNotificacion('Error', 'Seleccione el sexo', false);
+                return;
+            }
+            if (!fechaNac) {
+                mostrarNotificacion('Error', 'La fecha de nacimiento es obligatoria', false);
+                return;
+            }
+            
+            // Validar edad antes de enviar
+            if (!validarEdad()) {
+                mostrarNotificacion('Error', 'El trabajador debe tener al menos 18 años de edad', false);
+                return;
+            }
             
             const formData = new FormData(this);
             const url = modoEdicion ? '@Url.Action("Editar", "Trabajador")' : '@Url.Action("Crear", "Trabajador")';
