@@ -46,7 +46,7 @@ git clone https://github.com/fabricioramos-IF/GESTION_MANTEMINETO_TRABAJADORES.g
 cd GESTION_MANTEMINETO_TRABAJADORES
 ```
 
-Ejecutar `DB_TRABJADORESPRUEBA.sql` en SSMS o Azure Data Studio. Crea la BD, tabla y 4 SPs.
+Ejecutar `DB_TRABJADORESPRUEBA.sql` en sql server
 
 ### 2. Configurar conexión
 
@@ -170,20 +170,6 @@ dotnet test
 
 ---
 
-## Bonus Implementados
-
-- ✅ Filtro por sexo (chips interactivos)
-- ✅ Filas coloreadas: azul (M) / naranja (F)
-- ✅ Bootstrap 5 + diseño profesional
-- ✅ Responsive: tabla desktop, cards móvil
-- ✅ GitHub con commits descriptivos
-- ✅ Pruebas unitarias (xUnit + Moq)
-- ✅ Upload de foto con validación
-- ✅ Validador de edad mínima (18 años)
-- ✅ Landing page con stack tecnológico
-
----
-
 ## Mejoras Futuras
 
 - Paginación servidor, búsqueda por texto, exportación PDF/Excel
@@ -193,4 +179,4 @@ dotnet test
 
 ---
 
-© 2026 Fabricio Ramos — Prueba técnica MYPER Software
+© 2026 Fabricio Ramos — Prueba técnica  
